@@ -8,9 +8,10 @@ var slugify = require('slugify');
 const UserSchema = new Schema({
   password: { type: String, select: false },
   username: { type: String, required: true, unique: true },
-  stocks : [{ type: Schema.Types.ObjectId, ref: "Stocks" }],
+  stocks : [{ type: Schema.Types.ObjectId, ref: "Stock" }],
   money : { type: Number },
-  portfolioWorth: { type: Number }
+  portfolioWorth: { type: Number },
+  email: {type: String, required: false}
 });
 
 

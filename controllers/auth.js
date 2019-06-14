@@ -8,15 +8,23 @@ module.exports = app => {
     app.get('/', (req,res) => {
         var portfolioWorth;
         var currentUser = req.user;
-        stocks = []
+        let money;
+        // let testStock;
+        // let user = currentUser;
+        // let stock;
         // console.log(currentUser)
         if (currentUser) {
             User.findOne({_id: currentUser})
                 .then(user => {
-                    portfolioWorth = user.portfolioWorth
+                    // testStock = new Stock({symbol: 'AAPL', quote:1.00, shares: 30, priceAtPurchase:1.00, owner:user});
+                    // testStock.save();
+                    // user.stocks.push(testStock);
+                    // user.save();
+                    portfolioWorth = user.portfolioWorth;
+                    money = user.money;
                     // for (let i = 0; i < user.stocks.length; i++){
-                        console.log(user.stocks[0])
-                        Stock.findOne({_id: user.stocks[0]})
+                        // console.log(1,user, currentUser, stock)
+                        Stock.findOne({owner: currentUser}).populate('quote')
 
                         // symbol: { type: String, required: true, unique: true },
                         // quote: { type: Number, required: false },
@@ -25,15 +33,15 @@ module.exports = app => {
                         // priceAtPurchase : { type: Number, required: false}
 
                         .then(stock => {
-                            console.log("hey " + stock)
-                            stocks.push(stock)
-                        })
+                            console.log(2, user, stock)
+                        //     stocks.push(stock)
+                        // })
                     // })
                     // console.log("here's your stock " + user.stocks[0])
                     // Stock.find()//.populate('quote')
-                   console.log("it did not work " + stocks)
-                { res.render('portfolio', {currentUser, portfolioWorth, stocks});
-            };
+                   // console.log("it did not work " + stocks)
+             res.render('portfolio', {currentUser, portfolioWorth, stock, money});
+         });
                 });
         } else {
             res.render('sign-in', currentUser);
@@ -104,9 +112,6 @@ module.exports = app => {
     app.post("/register", (req, res) => {
       // Create User and JWT
       const user = new User(req.body);
-      let testStock = new Stock({symbol: 'AAPL', quote:1.00, shares: 30, priceAtPurchase:1.00});
-      testStock.save();
-      user.stocks.push(testStock);
       user.money = 5000;
       user.portfolioWorth = 0;
           user.save().then((user) => {

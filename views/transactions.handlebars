@@ -1,8 +1,23 @@
-<div class='site_name_container'>
-<div class="row">
-    <div class="col-sm-8 col-sm-offset-2">
+<div class='transactions_container'>
         <h3>Transactions</h3>
-        <ul>
+        <div class="transactions_stocks">
+            <ol>
+                <li class="list-group-item">stock1</li>
+                <li class="list-group-item">stock2</li>
+                <li class="list-group-item">stock3</li>
+                <li class="list-group-item">stock4</li>
+                <!-- {{#each stocks}}
+                <li class="list-group-item">
+                    <div class="lead">
+                 <h3>{{this.symbol}}</h3>
+                 </div>
+                      <div><small>{{this.shares}}</small></div>
+                      <div><small>{{this.quote}}</small></div>
+                </li>
+                {{/each}} -->
+            </ol>
+        </div>
+        <!-- <ul>
             {{#each stocks}}
             <li class="list-group-item">
                 <div class="lead">
@@ -12,7 +27,5 @@
                   <div><small>{{this.quote}}</small></div>
             </li>
             {{/each}}
-        </ul>
-</div>
-</div>
+        </ul> -->
 </div>
