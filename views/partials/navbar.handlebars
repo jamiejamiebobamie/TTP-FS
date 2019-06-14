@@ -8,18 +8,15 @@
         <ul class="nav navbar-nav navbar-left">
           {{#if currentUser}}
             <li><a href="/sign-out">Sign Out</a></li>
-          {{else}}
-          <div></div>
           {{/if}}
         </ul>
-
         <ul class="nav navbar-nav navbar-right">
           {{#if currentUser}}
-          <li><a href="/">Portfolio</a></li>
-          <li><a href="/transactions">Transactions</a></li>
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/transactions">Transactions</a></li>
           {{else}}
-          <li><a href="/sign-in">Sign In</a></li>
-          <li><a href="/register">Register</a></li>
+            <li><a href="/sign-in">Sign In</a></li>
+            <li><a href="/register">Register</a></li>
           {{/if}}
         </ul>
 

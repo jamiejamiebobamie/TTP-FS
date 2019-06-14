@@ -6,12 +6,16 @@ module.exports = (app) => {
     // TRANSACTIONS GET ROUTE, SHOW TRANSACTIONS PAGE
         app.get('/transactions', (req, res) => {
             var currentUser = req.user;
+            if (currentUser) {
             User.findOne({username: req.user})
                 .then(user => {
                    Stock.find().populate('quote')
                 {
-                res.render('transactions', {user: currentUser});
-                });
+                res.render('transactions', {currentUser});
+                };
             });
+            } else {
+                res.render('sign-in', currentUser);
+            }
         })
-    };
+};

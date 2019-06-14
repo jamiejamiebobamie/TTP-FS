@@ -1,0 +1,18 @@
+<div class='site_name_container'>
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+        <h3>Transactions</h3>
+        <ul>
+            {{#each stocks}}
+            <li class="list-group-item">
+                <div class="lead">
+             <h3>{{this.symbol}}</h3>
+             </div>
+                  <div><small>{{this.shares}}</small></div>
+                  <div><small>{{this.quote}}</small></div>
+            </li>
+            {{/each}}
+        </ul>
+</div>
+</div>
+</div>

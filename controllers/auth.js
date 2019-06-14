@@ -1,18 +1,43 @@
 const jwt = require('jsonwebtoken');
 const User = require("../models/user");
+const Stock = require("../models/stock");
 
 module.exports = app => {
 
     // INDEX :: SIGNED-IN, PORTFOLIO PAGE
     app.get('/', (req,res) => {
+        var portfolioWorth;
         var currentUser = req.user;
-        User.findOne({username: req.user})
-            .then(user => {
-               Stock.find().populate('quote')
-            {
-            res.render('portfolio', {user: currentUser});
+        stocks = []
+        // console.log(currentUser)
+        if (currentUser) {
+            User.findOne({_id: currentUser})
+                .then(user => {
+                    portfolioWorth = user.portfolioWorth
+                    // for (let i = 0; i < user.stocks.length; i++){
+                        console.log(user.stocks[0])
+                        Stock.findOne({_id: user.stocks[0]})
+
+                        // symbol: { type: String, required: true, unique: true },
+                        // quote: { type: Number, required: false },
+                        // news: { type: String, required: false},
+                        // shares : { type: Number, required: false},
+                        // priceAtPurchase : { type: Number, required: false}
+
+                        .then(stock => {
+                            console.log("hey " + stock)
+                            stocks.push(stock)
+                        })
+                    // })
+                    // console.log("here's your stock " + user.stocks[0])
+                    // Stock.find()//.populate('quote')
+                   console.log("it did not work " + stocks)
+                { res.render('portfolio', {currentUser, portfolioWorth, stocks});
+            };
                 });
-            });
+        } else {
+            res.render('sign-in', currentUser);
+        }
      });
 
     // SIGN-IN GET ROUTE, LOGIN PAGE
@@ -67,12 +92,23 @@ module.exports = app => {
         }
     });
 
+    // const StockSchema = new Schema({
+    //   symbol: { type: String, required: true, unique: true },
+    //   quote: { type: Number, required: false },
+    //   news: { type: String, required: false},
+    //   shares : { type: Number, required: false},
+    //   priceAtPurchase : { type: Number, required: false}
+    // });
+
     // RESGISTER POST ROUTE
     app.post("/register", (req, res) => {
       // Create User and JWT
       const user = new User(req.body);
-      console.log(req.body)
-
+      let testStock = new Stock({symbol: 'AAPL', quote:1.00, shares: 30, priceAtPurchase:1.00});
+      testStock.save();
+      user.stocks.push(testStock);
+      user.money = 5000;
+      user.portfolioWorth = 0;
           user.save().then((user) => {
               var token = jwt.sign({ _id: user._id }, process.env.SECRET, { expiresIn: "60 days" });
               res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
@@ -84,4 +120,4 @@ module.exports = app => {
             });
     });
 
-});
+};

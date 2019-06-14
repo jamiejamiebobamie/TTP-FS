@@ -12,10 +12,9 @@ const StockSchema = new Schema({
   priceAtPurchase : { type: Number, required: false}
 });
 
-
-// Always populate the author field
-StockSchema
-    .pre('findOne', Populate('quote'))
-    .pre('find', Populate('quote'))
+// // Always populate the author field
+// StockSchema
+//     .pre('findOne', Populate('quote'))
+//     .pre('find', Populate('quote'))
 
 module.exports = mongoose.model("Stock", StockSchema);

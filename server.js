@@ -46,6 +46,9 @@ app.use(checkAuth);
 const User = require('./models/user.js');
 const auth = require('./controllers/auth.js')(app);
 
+const Stock = require('./models/stock.js');
+const stocks = require('./controllers/stocks.js')(app);
+
 const port = process.env.PORT || 13000;
 
 // Add after body parser initialization!

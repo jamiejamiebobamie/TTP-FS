@@ -6,13 +6,10 @@ var slugify = require('slugify');
 
 
 const UserSchema = new Schema({
-  createdAt: { type: Date },
-  updatedAt: { type: Date },
   password: { type: String, select: false },
   username: { type: String, required: true, unique: true },
   stocks : [{ type: Schema.Types.ObjectId, ref: "Stocks" }],
   money : { type: Number },
-  transactions: [{ type: Schema.Types.ObjectId, ref: "Stocks" }],
   portfolioWorth: { type: Number }
 });
 
