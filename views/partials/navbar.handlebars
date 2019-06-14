@@ -2,18 +2,27 @@
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="/">
-        pin-pan
       </a>
     </div>
     <div>
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-left">
           {{#if currentUser}}
-            <li><a href="/logout">Logout</a></li>
+            <li><a href="/sign-out">Sign Out</a></li>
           {{else}}
-            <li><a href="/login">Login</a></li>
-            <li><a href="/sign-up">Sign Up</a></li>
+          <div></div>
           {{/if}}
         </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          {{#if currentUser}}
+          <li><a href="/">Portfolio</a></li>
+          <li><a href="/transactions">Transactions</a></li>
+          {{else}}
+          <li><a href="/sign-in">Sign In</a></li>
+          <li><a href="/register">Register</a></li>
+          {{/if}}
+        </ul>
+
     </div>
   </div>
 </nav>

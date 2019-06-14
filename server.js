@@ -22,6 +22,9 @@ const expressValidator = require('express-validator');
 //middleware for putting something when you post it
 const methodOverride = require('method-override');
 
+//iex stock api
+const iex = require('iex-api');
+
 // Use Body Parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -45,34 +48,6 @@ const auth = require('./controllers/auth.js')(app);
 
 const port = process.env.PORT || 13000;
 
-// passport.use(new PinterestStrategy({
-//         clientID: process.env.PINTEREST_APP_ID,
-//         clientSecret: process.env.PINTEREST_APP_SECRET,
-//         scope: ['read_public', 'read_relationships'],
-//         callbackURL: "https://localhost:13000/auth/pinterest/callback",
-//         state: true
-//     },
-//     function(process.env.A_TOKEN, refreshToken, process.env.PINTEREST_USERNAME, done) {
-//         User.findOrCreate({ pinterestId: profile.id }, function (err, user) {
-//             return done(err, user);
-//         });
-//     }
-// ));
-
-
-// INDEX
-    app.get('/', (req, res) => {
-        PDK.init({
-            appId: process.env.PINTEREST_APP_ID, // Change this
-            cookie: true
-        });
-        console.log(PDK)
-        var currentUser = req.user;
-        process.env.A_TOKEN
-        res.render('main', {currentUser});
-        })
-
-
 // Add after body parser initialization!
 app.use(expressValidator());
 
@@ -85,10 +60,10 @@ app.use(methodOverride('_method'))
 app.use(express.static('public'));
 
 // //heroku database.
-mongoose.connect((process.env.MONGODB_URI || 'mongodb://localhost/pinterest'), { useNewUrlParser: true });
+// mongoose.connect((process.env.MONGODB_URI || 'mongodb://localhost/database'), { useNewUrlParser: true });
 
 // local host database
-// mongoose.connect('mongodb://localhost/pinterest');
+mongoose.connect('mongodb://localhost/database');
 
 //views middleware
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));

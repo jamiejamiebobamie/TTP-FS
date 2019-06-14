@@ -1,7 +1,7 @@
 {
   "name": "ttp-fs",
   "version": "1.0.0",
-  "description": "Not quite sure what the point of this repo is. Ideally I am able to use the pins I've collected to train a neural network in some manner, but right now I'm just focused on syncing my account with this RESTful API.",
+  "description": "A mock stock buying app",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,13 +10,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
     "express-validator": "^5.3.1",
+    "iex-api": "0.0.3",
     "method-override": "^3.0.0",
-    "mongoose": "^5.5.15"
+    "mongoose": "^5.5.15",
+    "slugify": "^1.3.4"
   }
 }
