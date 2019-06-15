@@ -1,20 +1,22 @@
 <div class='transactions_container'>
         <h3>Transactions</h3>
         <div class="transactions_stocks">
-            <ol>
-                <li class="list-group-item">stock1</li>
+            <ol class="stock_list">
+                <!-- <li class="list-group-item">stock1</li>
                 <li class="list-group-item">stock2</li>
                 <li class="list-group-item">stock3</li>
-                <li class="list-group-item">stock4</li>
-                <!-- {{#each stocks}}
+                <li class="list-group-item">stock4</li> -->
+                {{#each transactions}}
                 <li class="list-group-item">
-                    <div class="lead">
-                 <h3>{{this.symbol}}</h3>
-                 </div>
-                      <div><small>{{this.shares}}</small></div>
-                      <div><small>{{this.quote}}</small></div>
+                <div class="lead">
+                 <h3>BUY ({{this.symbol}})</h3>
+                <div>{{this.quantity}}</div>
+                @ <div>{{this.priceAtPurchase}}</div>
+
+                </div>
+                      <!-- <div><small>{{this.quote}}</small></div> -->
                 </li>
-                {{/each}} -->
+                {{/each}}
             </ol>
         </div>
         <!-- <ul>

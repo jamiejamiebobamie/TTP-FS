@@ -9,9 +9,12 @@ const UserSchema = new Schema({
   password: { type: String, select: false },
   username: { type: String, required: true, unique: true },
   stocks : [{ type: Schema.Types.ObjectId, ref: "Stock" }],
+  // ownedStockSymbols : { type : Array , "default" : [], unique: false, required: false },
+  transactions : { type : Array , "default" : [], unique: false, required: false },
+  // stocks: { any: Object, unique: false, required: false, "default" : []},
   money : { type: Number },
   portfolioWorth: { type: Number },
-  email: {type: String, required: false}
+  email: {type: String, required: true, unique: true}
 });
 
 

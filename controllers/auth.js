@@ -9,6 +9,8 @@ module.exports = app => {
         var portfolioWorth;
         var currentUser = req.user;
         let money;
+        let stocks;
+        let stockKeys;
         // let testStock;
         // let user = currentUser;
         // let stock;
@@ -22,9 +24,15 @@ module.exports = app => {
                     // user.save();
                     portfolioWorth = user.portfolioWorth;
                     money = user.money;
+                    stocks = user.stocks
+                    // console.log(stocks_i)
+                    // for (let i = 0; i < stocks_i; i++){
+                    //     console.log(user.stocks)
+                    //     console.log(user.stocks[stockKeys[i]])
+                    // }
                     // for (let i = 0; i < user.stocks.length; i++){
                         // console.log(1,user, currentUser, stock)
-                        Stock.findOne({owner: currentUser}).populate('quote')
+                        Stock.find({owner: currentUser})
 
                         // symbol: { type: String, required: true, unique: true },
                         // quote: { type: Number, required: false },
@@ -32,17 +40,19 @@ module.exports = app => {
                         // shares : { type: Number, required: false},
                         // priceAtPurchase : { type: Number, required: false}
 
-                        .then(stock => {
-                            console.log(2, user, stock)
+                        .then(stocks => {
+                            console.log(stocks)
+                        //     for (let i = 0; i < user.stocks.length; i++){
+                        //     console.log(2, user, stock)
                         //     stocks.push(stock)
                         // })
                     // })
                     // console.log("here's your stock " + user.stocks[0])
                     // Stock.find()//.populate('quote')
                    // console.log("it did not work " + stocks)
-             res.render('portfolio', {currentUser, portfolioWorth, stock, money});
-         });
-                });
+             res.render('portfolio', {currentUser, portfolioWorth, money, stocks});
+            });
+            });
         } else {
             res.render('sign-in', currentUser);
         }
