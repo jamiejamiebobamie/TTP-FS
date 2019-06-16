@@ -5,12 +5,16 @@ const Stock = require("../models/stock");
 const iex = require('iex-api');
 const _fetch = require('isomorphic-fetch')
 
+var mailgun = require('mailgun-js')({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
+// const mg = mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
+
 module.exports = app => {
 
     // INDEX :: SIGNED-IN, PORTFOLIO PAGE
     app.get('/', (req,res) => {
+        console.log(currentUser)
         const client = new iex.IEXClient(_fetch)
-        console.log(client)
+        // console.log(client)
         client.stockKeyStats('AAPL')
         .then(company => console.log("hey" + company))
 
@@ -19,6 +23,7 @@ module.exports = app => {
         let money;
         let stocks;
         let stockKeys;
+        let activated = true;
         // let testStock;
         // let user = currentUser;
         // let stock;
@@ -30,9 +35,13 @@ module.exports = app => {
                     // testStock.save();
                     // user.stocks.push(testStock);
                     // user.save();
-                    portfolioWorth = user.portfolioWorth;
+                    // portfolioWorth = user.portfolioWorth;
+                    // activated = user.activated;
+                    // console.log(":(" + user)
+                    // console.log(":)" + activated)
+
                     money = user.money;
-                    stocks = user.stocks
+                    // stocks = user.stocks
                     // console.log(stocks_i)
                     // for (let i = 0; i < stocks_i; i++){
                     //     console.log(user.stocks)
@@ -40,7 +49,7 @@ module.exports = app => {
                     // }
                     // for (let i = 0; i < user.stocks.length; i++){
                         // console.log(1,user, currentUser, stock)
-                        Stock.find({owner: currentUser})
+                        Stock.findOneAndUpdate({owner: currentUser})
 
                         // symbol: { type: String, required: true, unique: true },
                         // quote: { type: Number, required: false },
@@ -48,8 +57,43 @@ module.exports = app => {
                         // shares : { type: Number, required: false},
                         // priceAtPurchase : { type: Number, required: false}
 
-                        .then(stocks => {
-                            console.log(stocks)
+                        .then(stock => {
+                            // console.log(stock)
+                            if (stock) {
+                                portfolioWorth = parseInt(stock.quantity) * parseInt(stock.priceNow)
+                                if (parseInt(stock.priceNow) < parseInt(stock.priceAtStartOfDay) ) {
+                                    stock.color = "red";
+                                } else if (parseInt(stock.priceNow) > parseInt(stock.priceAtStartOfDay) ) {
+                                    stock.color = "green";
+                                } else {
+                                    stock.color = "grey";
+                                }
+                                stock.value =  parseInt(stock.quantity) * parseInt(stock.priceNow)
+                                // stock.save();
+
+                                // symbol: { type: String, required: false, unique: false },
+                                // priceAtPurchase: { type: Number, required: false, unique: false },
+                                // news: { type: String, required: false, unique: false },
+                                // quantity : { type: Number, required: false, unique: false },
+                                // action: { type: String, required: false, unique: false },
+                                // owner: { type: Schema.Types.ObjectId, ref: "User", unique: false, sparse: true },
+                                // color: {type: String, required: false, unique: false },
+                                // priceAtStartOfDay: { type: Number, required: false, unique: false },
+                                // priceNow: {type: Number, required: false, unique: false },
+                                // value: {type: Number, required: false, unique: false }
+
+                                // console.log("here's your stock " + stock.color, stock.symbol, stock.quantity)
+                            }
+                            // Stock.find({owner: currentUser})
+
+                            // symbol: { type: String, required: true, unique: true },
+                            // quote: { type: Number, required: false },
+                            // news: { type: String, required: false},
+                            // shares : { type: Number, required: false},
+                            // priceAtPurchase : { type: Number, required: false}
+
+                            // .then(stock => {
+
                         //     for (let i = 0; i < user.stocks.length; i++){
                         //     console.log(2, user, stock)
                         //     stocks.push(stock)
@@ -58,7 +102,8 @@ module.exports = app => {
                     // console.log("here's your stock " + user.stocks[0])
                     // Stock.find()//.populate('quote')
                    // console.log("it did not work " + stocks)
-             res.render('portfolio', {currentUser, portfolioWorth, money, stocks});
+             res.render('portfolio', {currentUser, portfolioWorth, money, stock, activated});
+            // });
             });
             });
         } else {
@@ -114,7 +159,7 @@ module.exports = app => {
         if (currentUser) {
             res.redirect('/');
         } else {
-            res.render('register', currentUser);
+            res.render('register');
         }
     });
 
@@ -132,6 +177,23 @@ module.exports = app => {
       const user = new User(req.body);
       user.money = 5000;
       user.portfolioWorth = 0;
+      user.activated = true;
+      console.log(user)
+
+      email = req.body.email
+      // console.log(email)
+      const data = {
+	         from: email,
+	         to: email,
+	         subject: 'Hello',
+	         text: 'Testing some Mailgun awesomness!'
+         };
+         console.log(data)
+    mailgun.messages().send(data, function (error, body) {
+	          console.log(body);
+              console.log("hi")
+          });
+          console.log("hey")
           user.save().then((user) => {
               var token = jwt.sign({ _id: user._id }, process.env.SECRET, { expiresIn: "60 days" });
               res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
@@ -143,4 +205,17 @@ module.exports = app => {
             });
     });
 
+    //ACTIVATE ACCOUNT ROUTE
+     app.get('/:id/activate', (req, res) => {
+         const currentUser = req.user
+         console.log(currentUser)
+         let activated;
+         Users.findOneAndUpdate( { _id: currentUser } )
+         .then(user => {
+             user.activated = true
+             user.save()
+             activated = true
+             res.render('/', currentUser, activated);
+         });
+     });
 };

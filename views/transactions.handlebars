@@ -1,44 +1,14 @@
 <div class='transactions_container'>
-        <h3>Transactions</h3>
-        <div class="transactions_stocks">
-            <ol class="stock_list">
-                <!-- <li class="list-group-item">stock1</li>
-                <li class="list-group-item">stock2</li>
-                <li class="list-group-item">stock3</li>
-                <li class="list-group-item">stock4</li> -->
-                {{#each transactions}}
-                <!-- <li class="list-group-item"> -->
+    <h1>Transactions</h1>
+    <!-- <div class="transactions"> -->
+        <ol class="transaction_list">
+            {{#each transactions}}
                 <div class="transaction_item">
-
-
-                <h3>BUY</h3>
-                <h3> ({{this.symbol}})</h3>
-
-
-
-                <h3> - </h3>
-
-
-
-                <h3>{{this.quantity}}</h3>
-                <h3> @ </h3>
-                <h3>{{this.priceAtPurchase}}</h3>
-
-
+                    <h3>BUY ({{this.symbol}})</h3>
+                    <h3> - </h3>
+                    <h3> {{this.quantity}} Shares @ {{this.priceAtPurchase}}</h3>
                 </div>
-                <!-- </li> -->
-                {{/each}}
-            </ol>
-        </div>
-        <!-- <ul>
-            {{#each stocks}}
-            <li class="list-group-item">
-                <div class="lead">
-             <h3>{{this.symbol}}</h3>
-             </div>
-                  <div><small>{{this.shares}}</small></div>
-                  <div><small>{{this.quote}}</small></div>
-            </li>
             {{/each}}
-        </ul> -->
+        </ol>
+    <!-- </div> -->
 </div>

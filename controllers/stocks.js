@@ -25,7 +25,7 @@ module.exports = (app) => {
         // TRANSACTIONS GET ROUTE, SHOW TRANSACTIONS PAGE
             app.post('/buy', (req, res) => {
                 var currentUser = req.user;
-                let quantity = req.body.qty
+                let quantity = Math.ceil(req.body.qty)
                 let ticker = req.body.ticker
                 let moneyAfterPurchase;
                 let newStock;
@@ -61,8 +61,7 @@ module.exports = (app) => {
                                    stock.save();
                                } else {
                                    console.log("false")
-
-                                  newStock = new Stock({symbol: ticker, quantity: quantity, owner:user});
+                                  newStock = new Stock({symbol: ticker, quantity: quantity, owner:user, priceAtPurchase: 30, priceAtStartOfDay: 30, priceNow: 40, color:"red"});
                                   newStock.save();
                                   console.log("newStock " + newStock)
                                   user.stocks.push(newStock);

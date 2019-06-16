@@ -1,25 +1,22 @@
+{{#if activated}}
 <div class='portfolio_container'>
-<h1>Portfolio (${{portfolioWorth}})</h1>
-<div class="portfolio_interaction">
-    <!-- portfolio_interaction -->
+    <h1>Portfolio (${{portfolioWorth}})</h1>
+    <div class="portfolio_interaction">
         <div class="portfolio_stocks">
             <ol class="stock_list">
-                <!-- <li class="list-group-item">stock1</li>
-                <li class="list-group-item">stock2</li>
-                <li class="list-group-item">stock3</li>
-                <li class="list-group-item">stock4</li> -->
-                {{#each stocks}}
-                <li class="list-group-item">
-                    <div class="lead">
-                 <h3>{{this.symbol}}</h3>
-                 </div>
-                      <div><small>{{this.quantity}}</small></div>
-                      <!-- <div><small>{{this.quote}}</small></div> -->
-                </li>
+                {{#each stock}}
+                    <div class="stock_item">
+                        <font color="{{this.color}}">
+                        <h3>{{this.symbol}}</h3>
+                        </font>
+                        <h3> - {{this.quantity}} Shares</h3>
+                        <font color="{{this.color}}">
+                        <h3>${{this.value}}</h3>
+                        </font>
+                    </div>
                 {{/each}}
             </ol>
         </div>
-
         <div class="buy">
             <h2>Cash - ${{money}}</h2>
             <form class="buy" action="/buy" method="post">
@@ -32,5 +29,8 @@
               <button type="submit" class="btn btn-primary">Buy</button>
             </form>
         </div>
+    </div>
 </div>
-</div>
+{{else}}
+<h2>Please check your email for an acitvation link.</h2>
+{{/if}}

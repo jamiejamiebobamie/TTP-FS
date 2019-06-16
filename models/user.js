@@ -14,7 +14,8 @@ const UserSchema = new Schema({
   // stocks: { any: Object, unique: false, required: false, "default" : []},
   money : { type: Number },
   portfolioWorth: { type: Number },
-  email: {type: String, required: true, unique: true}
+  email: {type: String, required: true, unique: true},
+  activated: { type: Boolean, select: false, unique: false },
 });
 
 
