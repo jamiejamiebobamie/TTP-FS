@@ -2,10 +2,18 @@ const jwt = require('jsonwebtoken');
 const User = require("../models/user");
 const Stock = require("../models/stock");
 
+const iex = require('iex-api');
+const _fetch = require('isomorphic-fetch')
+
 module.exports = app => {
 
     // INDEX :: SIGNED-IN, PORTFOLIO PAGE
     app.get('/', (req,res) => {
+        const client = new iex.IEXClient(_fetch)
+        console.log(client)
+        client.stockKeyStats('AAPL')
+        .then(company => console.log("hey" + company))
+
         var portfolioWorth;
         var currentUser = req.user;
         let money;

@@ -7,15 +7,26 @@
                 <li class="list-group-item">stock3</li>
                 <li class="list-group-item">stock4</li> -->
                 {{#each transactions}}
-                <li class="list-group-item">
-                <div class="lead">
-                 <h3>BUY ({{this.symbol}})</h3>
-                <div>{{this.quantity}}</div>
-                @ <div>{{this.priceAtPurchase}}</div>
+                <!-- <li class="list-group-item"> -->
+                <div class="transaction_item">
+
+
+                <h3>BUY</h3>
+                <h3> ({{this.symbol}})</h3>
+
+
+
+                <h3> - </h3>
+
+
+
+                <h3>{{this.quantity}}</h3>
+                <h3> @ </h3>
+                <h3>{{this.priceAtPurchase}}</h3>
+
 
                 </div>
-                      <!-- <div><small>{{this.quote}}</small></div> -->
-                </li>
+                <!-- </li> -->
                 {{/each}}
             </ol>
         </div>

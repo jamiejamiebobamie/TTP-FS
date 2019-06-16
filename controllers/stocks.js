@@ -61,8 +61,10 @@ module.exports = (app) => {
                                    stock.save();
                                } else {
                                    console.log("false")
+
                                   newStock = new Stock({symbol: ticker, quantity: quantity, owner:user});
                                   newStock.save();
+                                  console.log("newStock " + newStock)
                                   user.stocks.push(newStock);
                                 }
                                 new_transaction = {symbol: ticker, priceAtPurchase: 30, quantity: quantity}
