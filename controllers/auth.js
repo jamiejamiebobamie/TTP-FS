@@ -181,6 +181,7 @@ module.exports = app => {
       console.log(user)
 
       email = req.body.email
+
       // console.log(email)
       const data = {
 	         from: email,
@@ -188,12 +189,12 @@ module.exports = app => {
 	         subject: 'Hello',
 	         text: 'Testing some Mailgun awesomness!'
          };
+
          console.log(data)
     mailgun.messages().send(data, function (error, body) {
 	          console.log(body);
               console.log("hi")
           });
-          console.log("hey")
           user.save().then((user) => {
               var token = jwt.sign({ _id: user._id }, process.env.SECRET, { expiresIn: "60 days" });
               res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
