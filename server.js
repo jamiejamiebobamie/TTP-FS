@@ -63,10 +63,10 @@ app.use(methodOverride('_method'))
 app.use(express.static('public'));
 
 // //heroku database.
-// mongoose.connect((process.env.MONGODB_URI || 'mongodb://localhost/database'), { useNewUrlParser: true });
+mongoose.connect((process.env.MONGODB_URI || 'mongodb://localhost/database'), { useNewUrlParser: true });
 
 // local host database
-mongoose.connect('mongodb://localhost/database');
+// mongoose.connect('mongodb://localhost/database');
 
 //views middleware
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
