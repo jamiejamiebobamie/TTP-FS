@@ -13,15 +13,15 @@ module.exports = app => {
     app.get('/', (req,res) => {
         request = require('request');
         var currentUser = req.user;
-
         let money;
-        let stocks;
-        let stockKeys;
         let activated = false;
-        let current_info;
-        let portfolioWorth = 0;
-        let currentSum = 0;
+        let stocks;
         let currentWorth = 0;
+        let portfolioWorth = 0;
+        let current_info;
+        let currentSum = 0;
+
+
         if (currentUser) {
             User.findOne({_id: currentUser})
                 .then(user => {
@@ -35,10 +35,8 @@ module.exports = app => {
                                 for (let i = 0; i < stocks.length; i++){
                                     search_stocks += stocks[i].symbol + ","
                                 }
-                                console.log(search_stocks, stocks.length)
                                 request("https://api.iextrading.com/1.0/tops?symbols="+search_stocks, function(error, response, body) {
                                     current_info = JSON.parse(body);
-                                    console.log(current_info, current_info.length, search_stocks, stocks.length)
                                 if (current_info.length > 0){
                                 for (let i = 0; i < current_info.length; i++){
                                     stocks[i].priceNow = current_info[i].lastSalePrice
@@ -53,9 +51,7 @@ module.exports = app => {
                                 }
                                 stocks[i].save()
                                 currentSum += parseInt(stocks[i].value)
-                                console.log('hi'+currentSum)
                             }
-                            console.log('hello'+currentSum)
                             user.portfolioWorth = Number(parseInt(currentSum)).toFixed(2);
                             user.save()
                         } else {
@@ -63,7 +59,6 @@ module.exports = app => {
                             for (let i = 0; i < stocks.length; i++){
                             portfolioWorth += parseInt(stocks[i].quantity) * parseInt(stocks[i].priceNow)
                         }
-                        console.log("helloleje"+portfolioWorth)
                         user.portfolioWorth = Number(parseInt(portfolioWorth)).toFixed(2);
                         user.save()
                         }

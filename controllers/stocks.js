@@ -27,6 +27,7 @@ module.exports = (app) => {
                 let newStock;
                 let new_transaction;
                 let valid_stock;
+
                 if (currentUser) {
                 User.findOne({_id: req.user})
                     .then(user => {
