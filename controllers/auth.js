@@ -128,7 +128,7 @@ module.exports = app => {
     app.post("/register", (req, res) => {
       // Create User and JWT
       const user = new User(req.body);
-      const link = 'http://localhost:13000/'+user._id+"/activate"
+      const link = 'https://techtalentpipeline-fullstack.herokuapp.com/'+user._id+"/activate"
       // const link = "herokuapp.com/"
       user.money = 5000;
       user.portfolioWorth = 0;
