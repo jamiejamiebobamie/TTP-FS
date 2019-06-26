@@ -66,7 +66,7 @@ app.use(express.static('public'));
 mongoose.connect((process.env.MONGODB_URI || 'mongodb://localhost/database'), { useNewUrlParser: true });
 
 // local host database
-// mongoose.connect('mongodb://localhost/database');
+// heroku mongoose.connect('mongodb://localhost/database');
 
 //views middleware
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));

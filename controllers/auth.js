@@ -46,7 +46,7 @@ module.exports = app => {
                                     stocks[i].color = "red";
                                 } else if (parseInt(stocks[i].priceNow) > parseInt(stocks[i].priceAtPurchase) ) {
                                     stocks[i].color = "green";
-                                } else {
+                                } else if (parseInt(stocks[i].priceNow) == parseInt(stocks[i].priceAtPurchase) ){
                                     stocks[i].color = "grey";
                                 }
                                 stocks[i].save()
