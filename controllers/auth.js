@@ -42,11 +42,11 @@ module.exports = app => {
                                     stocks[i].priceNow = current_info[i].lastSalePrice
                                     stocks[i].value = stocks[i].quantity * stocks[i].priceNow
                                     stocks[i].value = Number((stocks[i].value).toFixed(2));
-                                if (parseInt(stocks[i].priceNow) < parseInt(stocks[i].priceAtPurchase) ) {
+                                if (parseFloat(stocks[i].priceNow) < parseFloat(stocks[i].priceAtPurchase) ) {
                                     stocks[i].color = "red";
-                                } else if (parseInt(stocks[i].priceNow) > parseInt(stocks[i].priceAtPurchase) ) {
+                                } else if (parseFloat(stocks[i].priceNow) > parseFloat(stocks[i].priceAtPurchase) ) {
                                     stocks[i].color = "green";
-                                } else if (parseInt(stocks[i].priceNow) == parseInt(stocks[i].priceAtPurchase) ){
+                                } else if (parseFloat(stocks[i].priceNow) == parseFloat(stocks[i].priceAtPurchase) ){
                                     stocks[i].color = "grey";
                                 }
                                 stocks[i].save()
