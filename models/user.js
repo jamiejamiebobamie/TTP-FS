@@ -16,6 +16,7 @@ const UserSchema = new Schema({
   portfolioWorth: { type: Number },
   email: {type: String, required: true, unique: true},
   activated: { type: Boolean, select: false, unique: false },
+  worth : { type: Number }
 });
 
 

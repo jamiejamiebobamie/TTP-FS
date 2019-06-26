@@ -26,10 +26,11 @@ module.exports = (app) => {
             app.post('/buy', (req, res) => {
                 var currentUser = req.user;
                 let quantity = Math.ceil(req.body.qty)
-                let ticker = req.body.ticker
+                let ticker = req.body.ticker.toUpperCase()
                 let moneyAfterPurchase;
                 let newStock;
                 let new_transaction;
+                let valid_stock;
                 // let newStockBool = true;
                 // console.log(req.body.qty, req.body.ticker, req.body)
                 if (currentUser) {
@@ -53,6 +54,15 @@ module.exports = (app) => {
                     // console.log(user.money)
                        Stock.findOne( {symbol: ticker, owner: user} )
                        .then(stock => {
+                           request = require('request');
+                           request("https://api.iextrading.com/1.0/tops?symbols="+ticker, function(error, response, body) {
+                            info = JSON.parse(body)
+                            console.log(info);
+                               valid_stock = JSON.parse(body).length
+                               console.log(valid_stock);
+                        if (valid_stock){
+                            console.log(true)
+
                            moneyAfterPurchase = user.money - (30 * quantity) // need to call to api to get quote
                            // console.log(moneyAfterPurchase)
                            if (moneyAfterPurchase > 0){
@@ -60,20 +70,21 @@ module.exports = (app) => {
                                    stock.quantity = parseInt(stock.quantity) + parseInt(quantity)
                                    stock.save();
                                } else {
-                                   console.log("false")
-                                  newStock = new Stock({symbol: ticker, quantity: quantity, owner:user, priceAtPurchase: 30, priceAtStartOfDay: 30, priceNow: 40, color:"red"});
+                                  newStock = new Stock({symbol: ticker, quantity: quantity, owner:user, priceAtPurchase: info[0].lastSalePrice, priceAtStartOfDay: info[0].lastSalePrice, priceNow: info[0].lastSalePrice, color:"grey"});
                                   newStock.save();
-                                  console.log("newStock " + newStock)
+                                  console.log("newStock " + newStock+ " price at purchase " + newStock.priceAtPurchase)
                                   user.stocks.push(newStock);
-                                }
-                                new_transaction = {symbol: ticker, priceAtPurchase: 30, quantity: quantity}
-                                user.transactions.push(new_transaction)
-                                user.money = moneyAfterPurchase;
-                                user.save();
-                                console.log(user.transactions)
-                            }
+                                      }
+                               new_transaction = {symbol: ticker, priceAtPurchase: info[0].lastSalePrice, quantity: quantity}
+                               user.transactions.push(new_transaction)
+                               user.money = moneyAfterPurchase;
+                               user.save();
+                               console.log(user.transactions)
+                          }
+                      }
                         });
                         });
+                    });
                         res.redirect('/');
                     // };
                     } else {

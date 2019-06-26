@@ -5,16 +5,16 @@ var uniqueValidator = require('mongoose-unique-validator');
 var slugify = require('slugify');
 
 const StockSchema = new Schema({
-  symbol: { type: String, required: false, unique: false },
-  priceAtPurchase: { type: Number, required: false, unique: false },
-  news: { type: String, required: false, unique: false },
-  quantity : { type: Number, required: false, unique: false },
-  action: { type: String, required: false, unique: false },
-  owner: { type: Schema.Types.ObjectId, ref: "User", unique: false, sparse: true },
-  color: {type: String, required: false, unique: false },
-  priceAtStartOfDay: { type: Number, required: false, unique: false },
-  priceNow: {type: Number, required: false, unique: false },
-  value: {type: Number, required: false, unique: false }
+  symbol: { type: String },
+  priceAtPurchase: { type: Number },
+  news: { type: String },
+  quantity : { type: Number },
+  action: { type: String },
+  owner: { type: Schema.Types.ObjectId, ref: "User" },
+  color: {type: String },
+  priceAtStartOfDay: { type: Number },
+  priceNow: {type: Number },
+  value: {type: Number }
 });
 
 // // Always populate the author field

@@ -12,18 +12,30 @@ module.exports = app => {
 
     // INDEX :: SIGNED-IN, PORTFOLIO PAGE
     app.get('/', (req,res) => {
-        console.log(currentUser)
-        const client = new iex.IEXClient(_fetch)
-        // console.log(client)
-        client.stockKeyStats('AAPL')
-        .then(company => console.log("hey" + company))
 
-        var portfolioWorth;
+        request = require('request');
+        // request("https://api.iextrading.com/1.0/tops?symbols=GOOG", function(error, response, body) {
+        //     console.log(JSON.parse(body)[0]);
+        // })
+
+
+        // console.log(currentUser)
+        // const client = new iex.IEXClient(_fetch)
+        // console.log(client)
+        // client.stockCompany('AAPL')
+        // .then(company => console.log("hey" + company))
+
+
         var currentUser = req.user;
+        console.log("currentUser"+currentUser)
+        console.log("id"+currentUser._id)
+
         let money;
         let stocks;
         let stockKeys;
-        let activated = true;
+        let activated = false;
+        let current_info;
+        let portfolioWorth = 0;
         // let testStock;
         // let user = currentUser;
         // let stock;
@@ -35,8 +47,9 @@ module.exports = app => {
                     // testStock.save();
                     // user.stocks.push(testStock);
                     // user.save();
-                    // portfolioWorth = user.portfolioWorth;
-                    // activated = user.activated;
+                    // portfolioWorth = user.worth;
+                    activated = user.activated;
+                    console.log("hello", activated, user.activated)
                     // console.log(":(" + user)
                     // console.log(":)" + activated)
 
@@ -49,7 +62,7 @@ module.exports = app => {
                     // }
                     // for (let i = 0; i < user.stocks.length; i++){
                         // console.log(1,user, currentUser, stock)
-                        Stock.findOneAndUpdate({owner: currentUser})
+                        Stock.find({owner: currentUser})
 
                         // symbol: { type: String, required: true, unique: true },
                         // quote: { type: Number, required: false },
@@ -57,18 +70,60 @@ module.exports = app => {
                         // shares : { type: Number, required: false},
                         // priceAtPurchase : { type: Number, required: false}
 
-                        .then(stock => {
+                        .then(stocks => {
                             // console.log(stock)
-                            if (stock) {
-                                portfolioWorth = parseInt(stock.quantity) * parseInt(stock.priceNow)
-                                if (parseInt(stock.priceNow) < parseInt(stock.priceAtStartOfDay) ) {
-                                    stock.color = "red";
-                                } else if (parseInt(stock.priceNow) > parseInt(stock.priceAtStartOfDay) ) {
-                                    stock.color = "green";
-                                } else {
-                                    stock.color = "grey";
+                            if (stocks != undefined || stocks.length != 0) {
+
+                                let search_stocks = ""
+                                for (let i = 0; i < stocks.length; i++){
+                                    search_stocks += stocks[i].symbol + ","
                                 }
-                                stock.value =  parseInt(stock.quantity) * parseInt(stock.priceNow)
+
+                                console.log(search_stocks)
+
+                                request("https://api.iextrading.com/1.0/tops?symbols="+search_stocks, function(error, response, body) {
+                                    console.log(JSON.parse(body));
+                                    current_info = JSON.parse(body);
+                                    // console.log("current_info"+current_info[0].lastSalePrice)
+
+    //                                 { symbol: 'INTC',
+                                    // sector: 'semiconductorssemiconductor',
+                                    // securityType: 'commonstock',
+                                    // bidPrice: 0,
+                                    // bidSize: 0,
+                                    // askPrice: 0,
+                                    // askSize: 0,
+                                    // lastUpdated: 1561496292625,
+                                    // lastSalePrice: 46.85,
+                                    // lastSaleSize: 300,
+                                    // lastSaleTime: 1561492797402,
+                                    // volume: 282945,
+                                    // marketPercent: 0.01742 }
+
+                                console.log(current_info)
+                                for (let i = 0; i < current_info.length; i++){
+                                    stocks[i].priceNow = current_info[i].lastSalePrice
+                                    stocks[i].value = stocks[i].quantity * stocks[i].priceNow
+                                    stocks[i].value = Number((stocks[i].value).toFixed(2));
+
+                                // portfolioWorth = parseInt(stocks.quantity) * parseInt(stocks.priceNow)
+                                if (parseInt(stocks[i].priceNow) < parseInt(stocks[i].priceAtPurchase) ) {
+                                    stocks[i].color = "red";
+                                } else if (parseInt(stocks[i].priceNow) > parseInt(stocks[i].priceAtPurchase) ) {
+                                    stocks[i].color = "green";
+                                } else {
+                                    stocks[i].color = "grey";
+                                }
+
+                                console.log(portfolioWorth,stocks[i].priceNow, stocks[i].value)
+                                stocks[i].save()
+                                portfolioWorth += parseInt(stocks[i].value)
+                            }
+                            user.worth = parseInt(portfolioWorth)
+                            user.save()
+
+                            // stocks.save
+                                // stocks.value =  parseInt(stocks.quantity) * parseInt(stocks.priceNow)
                                 // stock.save();
 
                                 // symbol: { type: String, required: false, unique: false },
@@ -83,7 +138,7 @@ module.exports = app => {
                                 // value: {type: Number, required: false, unique: false }
 
                                 // console.log("here's your stock " + stock.color, stock.symbol, stock.quantity)
-                            }
+
                             // Stock.find({owner: currentUser})
 
                             // symbol: { type: String, required: true, unique: true },
@@ -102,7 +157,9 @@ module.exports = app => {
                     // console.log("here's your stock " + user.stocks[0])
                     // Stock.find()//.populate('quote')
                    // console.log("it did not work " + stocks)
-             res.render('portfolio', {currentUser, portfolioWorth, money, stock, activated});
+            })}
+            console.log(currentUser, portfolioWorth, money, stocks, activated)
+             res.render('portfolio', {currentUser, portfolioWorth, money, stocks, activated});
             // });
             });
             });
@@ -175,9 +232,11 @@ module.exports = app => {
     app.post("/register", (req, res) => {
       // Create User and JWT
       const user = new User(req.body);
+      const link = 'http://localhost:13000/'+user._id+"/activate"
+      // const link = "herokuapp.com/"
       user.money = 5000;
       user.portfolioWorth = 0;
-      user.activated = true;
+      user.activated = false;
       console.log(user)
 
       email = req.body.email
@@ -186,8 +245,8 @@ module.exports = app => {
       const data = {
 	         from: email,
 	         to: email,
-	         subject: 'Hello',
-	         text: 'Testing some Mailgun awesomness!'
+	         subject: 'Validating your account!',
+	         text: 'Click this link to validate your account with the stock app! \n' + link
          };
 
          console.log(data)
@@ -211,12 +270,12 @@ module.exports = app => {
          const currentUser = req.user
          console.log(currentUser)
          let activated;
-         Users.findOneAndUpdate( { _id: currentUser } )
+         User.findOneAndUpdate( { _id: currentUser } )
          .then(user => {
              user.activated = true
              user.save()
              activated = true
-             res.render('/', currentUser, activated);
+             res.redirect('/', currentUser, activated);
          });
      });
 };
