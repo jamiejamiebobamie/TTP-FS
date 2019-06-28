@@ -1,4 +1,4 @@
-This is a repository for a stock exchange app that I built as part of a job-coding challenge. The app uses node.js and mongodb database and utilizes the IEX-trading API to show the valuation of a stock in real time.
+This is a repository for a stock exchange app that I built as part of a job-coding challenge. The app uses node.js, a mongodb database, and the IEX-trading API to show the valuation of a stock in real time.
 
 The live site can be found here: https://techtalentpipeline-fullstack.herokuapp.com.
 
